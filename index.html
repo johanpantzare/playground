@@ -3,9 +3,197 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hello World</title>
+  <title>Neon Console</title>
+  <style>
+    :root {
+      --bg: #07110b;
+      --panel: #0a1a12;
+      --line: #1f5f3f;
+      --text: #b9ffcf;
+      --muted: #82c79a;
+      --accent: #57ff95;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Consolas", "Courier New", monospace;
+      color: var(--text);
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(rgba(0, 255, 120, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 120, 0.06) 1px, transparent 1px),
+        radial-gradient(circle at 50% 20%, rgba(77, 255, 151, 0.08), transparent 60%);
+      background-size: 28px 28px, 28px 28px, auto;
+      overflow: hidden;
+    }
+    .terminal {
+      width: min(94vw, 760px);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel);
+      box-shadow: 0 0 40px rgba(0, 255, 136, 0.12), inset 0 0 30px rgba(0, 255, 136, 0.08);
+      overflow: hidden;
+      animation: boot 750ms ease-out;
+    }
+    .bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .screen {
+      padding: 18px 16px 20px;
+      min-height: 320px;
+    }
+    .line {
+      margin: 0 0 10px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+    .prompt {
+      color: var(--accent);
+    }
+    .headline {
+      margin: 2px 0 14px;
+      font-size: clamp(1.2rem, 3.5vw, 2rem);
+      color: var(--text);
+      text-shadow: 0 0 10px rgba(87, 255, 149, 0.35);
+    }
+    .actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    button {
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #0e2619;
+      color: var(--accent);
+      font-family: inherit;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+    }
+    button:hover {
+      transform: translateY(-1px);
+      background: #123120;
+      box-shadow: 0 0 12px rgba(87, 255, 149, 0.18);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    #output {
+      margin-top: 16px;
+      min-height: 70px;
+      border-left: 2px solid var(--line);
+      padding-left: 10px;
+      color: var(--text);
+      white-space: pre-wrap;
+    }
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      margin-left: 5px;
+      background: var(--accent);
+      animation: blink 1s steps(1, end) infinite;
+    }
+    @keyframes boot {
+      from { transform: scale(0.98); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+  </style>
 </head>
 <body>
-  <h1>Hello, world!</h1>
+  <main class="terminal">
+    <div class="bar">
+      <span>local://hello-world-v2</span>
+      <span id="clock"></span>
+    </div>
+    <section class="screen">
+      <p class="line"><span class="prompt">user@playground</span>:~$ run hello</p>
+      <h1 class="headline">HELLO, WORLD // NEON EDITION</h1>
+      <p class="line">Interactive terminal simulation loaded.</p>
+      <div class="actions">
+        <button id="fortune" type="button">print fortune</button>
+        <button id="joke" type="button">print dev-joke</button>
+        <button id="motivate" type="button">print momentum</button>
+      </div>
+      <div id="output" aria-live="polite">Ready for command<span class="cursor"></span></div>
+    </section>
+  </main>
+  <script>
+    const output = document.getElementById("output");
+    const clock = document.getElementById("clock");
+
+    const pools = {
+      fortune: [
+        "Fortune: Your next bug fix will take 7 minutes, not 70.",
+        "Fortune: Tiny commits today, giant confidence tomorrow.",
+        "Fortune: You will discover a helpful log line."
+      ],
+      joke: [
+        "Dev-joke: It works on my machine. This is my machine.",
+        "Dev-joke: There are 10 kinds of people... and flaky tests.",
+        "Dev-joke: I changed one line, now CI needs therapy."
+      ],
+      motivate: [
+        "Momentum: Start ugly, then iterate with intent.",
+        "Momentum: Small shipped beats perfect pending.",
+        "Momentum: You are one `git push` away from progress."
+      ]
+    };
+
+    function nowLabel() {
+      return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    }
+
+    function print(text) {
+      output.textContent = "";
+      const full = "user@playground:~$ " + text + "\n";
+      let i = 0;
+      const timer = setInterval(() => {
+        output.textContent += full[i];
+        i += 1;
+        if (i >= full.length) {
+          clearInterval(timer);
+          const cursor = document.createElement("span");
+          cursor.className = "cursor";
+          output.appendChild(cursor);
+        }
+      }, 12);
+    }
+
+    function handle(kind) {
+      const list = pools[kind];
+      if (!list) {
+        return;
+      }
+      const pick = list[Math.floor(Math.random() * list.length)];
+      print(pick);
+    }
+
+    document.getElementById("fortune").addEventListener("click", () => handle("fortune"));
+    document.getElementById("joke").addEventListener("click", () => handle("joke"));
+    document.getElementById("motivate").addEventListener("click", () => handle("motivate"));
+
+    clock.textContent = nowLabel();
+    setInterval(() => {
+      clock.textContent = nowLabel();
+    }, 1000);
+  </script>
 </body>
 </html>
