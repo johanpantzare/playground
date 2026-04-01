@@ -13,14 +13,14 @@
 
 .question-text {
   font-family: var(--font-heading);
-  font-size: clamp(1.1rem, 3vw, 1.3rem);
+  font-size: clamp(1.05rem, 3vw, 1.25rem);
   font-weight: 600;
   color: var(--color-text);
   line-height: 1.45;
   margin-bottom: 28px;
 }
 
-/* Answers */
+/* Choice answers */
 .answers-list {
   list-style: none;
   display: flex;
@@ -86,12 +86,12 @@
   background: var(--color-surface);
   margin-top: 2px;
   position: relative;
-  transition:
-    background var(--transition-fast),
-    border-color var(--transition-fast);
   display: flex;
   align-items: center;
   justify-content: center;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast);
 }
 
 .answer-indicator::after {
@@ -114,8 +114,20 @@
 }
 
 .answer-btn--selected .answer-text {
-  color: var(--color-text);
   font-weight: 500;
+}
+
+/* Slider confirm button row */
+.slider-confirm-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.btn-primary.slider-confirm-btn {
+  padding: 12px 28px;
+  font-size: 0.95rem;
+  margin-bottom: 0;
 }
 
 /* Navigation */
@@ -123,6 +135,7 @@
   display: flex;
   justify-content: flex-start;
   min-height: 36px;
+  margin-top: 4px;
 }
 
 .btn-ghost {
@@ -150,4 +163,37 @@
 .btn-ghost:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
+}
+
+/* btn-primary is defined in StartScreen.css and reused here */
+.btn-primary {
+  display: inline-block;
+  padding: 14px 36px;
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-deep) 100%);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+  box-shadow: 0 4px 16px rgba(217, 123, 157, 0.35);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(217, 123, 157, 0.45);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
 }

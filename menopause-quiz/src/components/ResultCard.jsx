@@ -5,13 +5,13 @@ export default function ResultCard({ result, totalScore, maxScore, onRestart }) 
   const [copied, setCopied] = useState(false)
 
   async function handleCopy() {
-    const shareText = `${result.emoji} ${result.title}\n"${result.subtitle}"\n\nMy score: ${totalScore}/${maxScore}\n\nTake the quiz: Är det klimakteriet, älskling?`
+    const shareText = `${result.emoji} ${result.title}\n"${result.subtitle}"\n\nMitt resultat: ${totalScore}/${maxScore}\n\nTa testet: Är det klimakteriet, älskling?`
     try {
       await navigator.clipboard.writeText(shareText)
       setCopied(true)
       setTimeout(() => setCopied(false), 2500)
     } catch {
-      // Clipboard not available — silently skip
+      // Clipboard ej tillgängligt
     }
   }
 
@@ -25,7 +25,7 @@ export default function ResultCard({ result, totalScore, maxScore, onRestart }) 
         <p className="result-subtitle">{result.subtitle}</p>
       </div>
 
-      <div className="result-score-ring" aria-label={`Score: ${totalScore} out of ${maxScore}`}>
+      <div className="result-score-ring" aria-label={`Poäng: ${totalScore} av ${maxScore}`}>
         <svg className="ring-svg" viewBox="0 0 80 80" aria-hidden="true">
           <circle className="ring-bg" cx="40" cy="40" r="34" />
           <circle
@@ -56,19 +56,19 @@ export default function ResultCard({ result, totalScore, maxScore, onRestart }) 
 
       <div className="result-actions">
         <button className="btn-primary result-restart" onClick={onRestart}>
-          Take it again
+          Gör om testet
         </button>
         <button
           className="btn-ghost result-copy"
           onClick={handleCopy}
           aria-live="polite"
         >
-          {copied ? '✓ Copied!' : 'Copy result'}
+          {copied ? '✓ Kopierat!' : 'Kopiera resultat'}
         </button>
       </div>
 
       <p className="result-fine-print">
-        This is not a medical assessment. It is, however, a vibe check.
+        Det här är inte en medicinsk bedömning. Det är dock en vibe check.
       </p>
     </div>
   )

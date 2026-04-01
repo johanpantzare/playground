@@ -1,61 +1,61 @@
-// Result categories mapped from total quiz score.
+// Result categories — "Är det klimakteriet, älskling?"
 // Max possible score: 36 (12 questions × 3)
 
 export const results = [
   {
-    id: 'still-waters',
+    id: 'lugnt-vatten',
     minScore: 0,
     maxScore: 9,
-    title: 'Still Waters',
-    subtitle: 'Your inner climate appears delightfully stable.',
-    body: `Your results suggest that your internal thermostat is humming along nicely. You're sleeping, you're coping, and — quite impressively — you can share a meal with a noisy person without developing a strong opinion about them.
+    title: 'Lugnt vatten',
+    subtitle: 'Ditt inre klimat verkar anmärkningsvärt stabilt.',
+    body: `Dina svar tyder på att din inre termostat surrar på behagligt. Du sover, du hanterar saker och du kan äta lunch bredvid en bullrig person utan att det uppstår några starka åsikter om honom eller henne.
 
-This could mean you're early in the journey, sailing past it entirely, or simply navigating it with extraordinary grace. All of these are valid. All are worthy of a small celebration.
+Det kan betyda att du är tidigt i resan, seglar förbi den helt och hållet, eller helt enkelt navigerar den med ovanlig elegans. Alla tre alternativen är fullt giltiga. Alla tre är värda ett litet firande.
 
-Either way: you appear to be doing rather well. Enjoy the calm. It suits you.`,
-    nudge: 'Remember, this quiz is not a medical assessment. If anything concerns you, your GP is always worth a conversation — they\'ve heard it all and they will not be surprised.',
+Hur som helst: du verkar ha det ganska bra. Njut av lugnet. Det klär dig.`,
+    nudge: 'Det här testet är inte en medicinsk bedömning. Om något ändå bekymrar dig är din läkare alltid värd ett samtal — de har hört allt och kommer inte att bli förvånade.',
     emoji: '🌿',
   },
   {
-    id: 'something-stirring',
+    id: 'nagonting-ror-pa-sig',
     minScore: 10,
     maxScore: 18,
-    title: 'Something is Stirring',
-    subtitle: 'A gentle internal shift may be underway.',
-    body: `There are signs. Not dramatic ones — more like a soft rearranging of furniture in a room you thought you knew well. A little warmth here. A slightly altered tolerance for nonsense there.
+    title: 'Något rör på sig',
+    subtitle: 'En varsam inre förändring kan vara på gång.',
+    body: `Det finns tecken. Inte dramatiska sådana — mer som ett mjukt ommöblerande i ett rum du trodde du kände väl. Lite extra värme här. En något förändrad tolerans för strunt där.
 
-You're not yet at the point of renaming your duvet or requiring full silence to function, but you've noticed that things are... different. Your body is communicating. It might be worth listening.
+Du är inte ännu på den punkt där du döpt om din duvet eller behöver fullständig tystnad för att fungera, men du har lagt märke till att saker är... annorlunda. Din kropp kommunicerar. Det kan vara värt att lyssna.
 
-The good news: you are absolutely not alone in this, you are not unwell, and there is a great deal that can be done. Knowledge is genuinely useful here.`,
-    nudge: 'This is not a diagnosis — it\'s a nudge. If these experiences are affecting your quality of life, speaking with a healthcare professional is a genuinely good idea.',
+Det goda nyheten: du är absolut inte ensam i det här, du är inte sjuk, och det finns en hel del som kan göras. Kunskap är genuint användbart här.`,
+    nudge: 'Det här är inte en diagnos — det är en liten knuff. Om dessa upplevelser påverkar din livskvalitet är det en genuint bra idé att prata med en vårdgivare.',
     emoji: '🌸',
   },
   {
-    id: 'under-pressure',
+    id: 'under-internt-tryck',
     minScore: 19,
     maxScore: 27,
-    title: 'Under Internal Pressure',
-    subtitle: 'Your inner landscape is going through quite a lot.',
-    body: `Your score suggests your body is in a reasonably active phase of change. There may be nights that aren't restful, days that run hot, moments of surprising emotion, and a newly developed sense that other people could perhaps be quieter and more efficient.
+    title: 'Under internt tryck',
+    subtitle: 'Ditt inre landskap genomgår ganska mycket just nu.',
+    body: `Ditt resultat tyder på att din kropp befinner sig i en aktiv förändringsperiod. Det kan finnas nätter som inte ger vila, dagar som blir varma, ögonblick av överraskande känslosamhet, och ett nyfunnet behov av att andra människor kanske kunde vara lite tystare och mer kompetenta.
 
-This is real. It is common. And it is, medically speaking, something worth taking seriously — not because anything is wrong with you, but because there are genuinely helpful options available.
+Det här är verkligt. Det är vanligt. Och det är, medicinskt sett, något som är värt att ta på allvar — inte för att något är fel på dig, utan för att det finns genuint hjälpsamma alternativ tillgängliga.
 
-You deserve to feel like yourself. Or a slightly updated, even more interesting version of yourself.`,
-    nudge: 'Please do talk to a doctor or specialist. Perimenopause and menopause are well-understood, treatable, and absolutely nothing to manage alone if you don\'t have to.',
+Du förtjänar att känna dig som dig själv. Eller en något uppdaterad, ännu mer intressant version av dig själv.`,
+    nudge: 'Prata med en läkare eller specialist. Klimakteriet är väl förstått, behandlingsbart och absolut ingenting du behöver hantera ensam om du inte vill.',
     emoji: '🌺',
   },
   {
-    id: 'full-spa-drama',
+    id: 'full-intern-spa-dramatik',
     minScore: 28,
     maxScore: 36,
-    title: 'Full Internal Spa Drama',
-    subtitle: 'Your body has opinions, and it is expressing all of them.',
-    body: `You are living through what can only be described as a comprehensive internal renovation. Heat events, sleep negotiations, concentration adventures, and an emotional sensitivity that suggests you are, in fact, feeling everything — with remarkable thoroughness.
+    title: 'Full intern spa-dramatik',
+    subtitle: 'Din kropp har åsikter, och den uttrycker dem alla.',
+    body: `Du lever genom vad som bara kan beskrivas som en omfattande intern renovering. Värmehändelser, sömnförhandlingar, koncentrationsäventyr och en känslomässig lyhördhet som tyder på att du faktiskt känner allting — med anmärkningsvärd grundlighet.
 
-Here is what we want you to hear: this is not weakness. This is your body doing something enormous, and doing it while you continue to show up, function, and apparently take quizzes at odd hours.
+Här är vad vi vill att du ska höra: det här är inte svaghet. Det här är din kropp som gör något enormt, och gör det medan du fortsätter att dyka upp, fungera och tydligen ta tester på konstiga tider.
 
-You are not imagining it. You are not being dramatic. You are, quite simply, in the thick of it.`,
-    nudge: 'We say this with warmth: please see a doctor. Not because something is terribly wrong, but because you shouldn\'t have to white-knuckle your way through this when support exists. You\'ve earned a little help.',
+Du inbillar dig inte. Du är inte dramatisk. Du befinner dig helt enkelt mitt i det.`,
+    nudge: 'Vi säger det här med värme: uppsök gärna en läkare. Inte för att något är allvarligt fel, utan för att du inte borde behöva vita-knoga dig igenom det här när stöd finns. Du har förtjänat lite hjälp.',
     emoji: '🔥',
   },
 ]

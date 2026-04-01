@@ -13,28 +13,28 @@ export default function StartScreen({ onStart }) {
       </h1>
 
       <p className="start-tagline">
-        A warm, witty wellness quiz for anyone who has recently opened a window
-        for no reason they can fully explain.
+        Ett varmt, klokt och lite väl ärligt välmåendetest för dig som
+        nyligen öppnat ett fönster av oklara skäl.
       </p>
 
       <div className="start-divider" aria-hidden="true" />
 
       <p className="start-intro">
-        Twelve questions. Honest answers. Zero judgement.
-        Just you, some gently phrased reflections on your inner climate,
-        and a result that will feel either surprisingly accurate
-        or extremely irrelevant — both are valid outcomes.
+        Tolv frågor. Ärliga svar. Noll dömande.
+        Bara du, lite varsamt formulerade reflektioner om ditt inre klimat,
+        och ett resultat som antingen känns träffsäkert eller
+        extremt irrelevant — båda är fullt giltiga utfall.
       </p>
 
       <button className="btn-primary start-cta" onClick={onStart}>
-        Begin the vibe check
+        Starta vibe check:en
       </button>
 
       <p className="start-disclaimer">
-        <strong>Not medical advice.</strong> This quiz is designed for reflection
-        and gentle humour — not diagnosis. If you have real concerns,
-        please speak with your GP. They have heard everything and they will
-        not be surprised.
+        <strong>Inte medicinsk rådgivning.</strong> Det här testet är gjort för
+        reflektion och lite varsam humor — inte för diagnos. Om du har
+        verkliga bekymmer, prata med din läkare. De har hört allt
+        och kommer inte att bli förvånade.
       </p>
     </div>
   )

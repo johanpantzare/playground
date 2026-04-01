@@ -4,9 +4,9 @@ export default function ProgressBar({ current, total }) {
   const percentage = Math.round((current / total) * 100)
 
   return (
-    <div className="progress-wrapper" role="group" aria-label="Quiz progress">
+    <div className="progress-wrapper" role="group" aria-label="Testets framsteg">
       <div className="progress-meta">
-        <span className="progress-label">Question {current} of {total}</span>
+        <span className="progress-label">Fråga {current} av {total}</span>
         <span className="progress-pct">{percentage}%</span>
       </div>
       <div
@@ -15,7 +15,7 @@ export default function ProgressBar({ current, total }) {
         aria-valuenow={current}
         aria-valuemin={1}
         aria-valuemax={total}
-        aria-label={`Question ${current} of ${total}`}
+        aria-label={`Fråga ${current} av ${total}`}
       >
         <div
           className="progress-fill"

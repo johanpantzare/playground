@@ -1,127 +1,190 @@
-// Quiz questions for "Är det klimakteriet, älskling?"
+// Quiz questions — "Är det klimakteriet, älskling?"
 //
-// Each answer has a score from 0 (not at all) to 3 (strongly yes).
-// Total max score: 12 questions × 3 = 36.
+// Question types:
+//   'mood'   — emoji card selector; answer = score (0–3)
+//   'slider' — range 0–10; answer = raw value (mapped to score in getAnswerScore)
+//   'choice' — 4 text options; answer = score (0–3)
+//
+// The first SCREENING_COUNT questions are the screening gate.
+// If their combined score is below SCREENING_THRESHOLD, the quiz
+// ends early with a "Lugnt vatten" result.
+
+export const SCREENING_COUNT = 3
+export const SCREENING_THRESHOLD = 3 // out of max 9 (3 × 3)
 
 export const questions = [
+  // ─── SCREENING (1–3) ────────────────────────────────────────────────────────
+
   {
     id: 1,
-    text: "How often does your body suddenly decide to host its own private heat wave — uninvited, unannounced, and deeply inconvenient?",
-    answers: [
-      { text: "Never. I am a temperate climate.", score: 0 },
-      { text: "Occasionally. A brief, confusing warmth.", score: 1 },
-      { text: "Regularly. I've started dressing in layers as a strategy.", score: 2 },
-      { text: "Constantly. I am currently on fire. Metaphorically. Probably.", score: 3 },
+    type: 'mood',
+    text: 'Hur mår du generellt sett just nu?',
+    options: [
+      { label: 'Strålande', emoji: '🌟', score: 0 },
+      { label: 'Ganska bra', emoji: '😊', score: 0 },
+      { label: 'Upp och ner', emoji: '🌊', score: 1 },
+      { label: 'Ganska trött', emoji: '😔', score: 2 },
+      { label: 'Inte bra alls', emoji: '🌧️', score: 3 },
     ],
   },
   {
     id: 2,
-    text: "You wake at 3am. You are damp. You did not go swimming. How familiar is this scenario?",
-    answers: [
-      { text: "Completely foreign. My nights are dry and peaceful.", score: 0 },
-      { text: "It's happened. I blamed the duvet.", score: 1 },
-      { text: "More often than I'd like to admit.", score: 2 },
-      { text: "I have a dedicated 'damp side' of the bed now.", score: 3 },
+    type: 'slider',
+    text: 'Hur ofta upplever du plötsliga värmevågor?',
+    minLabel: 'Aldrig',
+    maxLabel: 'Hela tiden',
+    valueLabels: [
+      'Aldrig',
+      'Nästan aldrig',
+      'Väldigt sällan',
+      'Sällan',
+      'Ibland',
+      'Ibland',
+      'Ganska ofta',
+      'Ofta',
+      'Ofta',
+      'Väldigt ofta',
+      'Hela tiden',
     ],
   },
   {
     id: 3,
-    text: "How would you describe your current relationship with sleep?",
-    answers: [
-      { text: "Warm and committed. We meet nightly at 10pm.", score: 0 },
-      { text: "Casual. Sometimes it shows up, sometimes it doesn't.", score: 1 },
-      { text: "Complicated. We're on a break and I didn't agree to it.", score: 2 },
-      { text: "Estranged. Sleep has ghosted me entirely.", score: 3 },
+    type: 'slider',
+    text: 'Hur väl sover du generellt sett?',
+    minLabel: 'Sover utmärkt',
+    maxLabel: 'Sover väldigt dåligt',
+    valueLabels: [
+      'Utmärkt',
+      'Mycket bra',
+      'Bra',
+      'Bra',
+      'Okej',
+      'Varierande',
+      'Varierande',
+      'Dåligt',
+      'Dåligt',
+      'Mycket dåligt',
+      'Uruselt',
     ],
   },
+
+  // ─── FULL ASSESSMENT (4–12) ─────────────────────────────────────────────────
+
   {
     id: 4,
-    text: "Someone is chewing. Loudly. Perhaps breathing. How do you respond internally?",
+    type: 'choice',
+    text: 'Hur ofta vaknar du på natten, svettig och utan att riktigt förstå varför?',
     answers: [
-      { text: "I notice nothing. I am a serene lake.", score: 0 },
-      { text: "A flicker of mild irritation, quickly released.", score: 1 },
-      { text: "I develop a quiet but intense opinion about this person.", score: 2 },
-      { text: "I fantasise about eating lunch alone. Forever.", score: 3 },
+      { text: 'Aldrig. Mina nätter är torra och fridfulla.', score: 0 },
+      { text: 'Det har hänt. Jag skyller på täcket.', score: 1 },
+      { text: 'Mer ofta än jag vill erkänna.', score: 2 },
+      { text: 'Jag har numera en dedikerad "fuktig sida" av sängen.', score: 3 },
     ],
   },
   {
     id: 5,
-    text: "How would you rate your emotional range in a typical week? (1 being 'settled' and 10 being 'full BBC documentary')",
+    type: 'choice',
+    text: 'Hur skulle du beskriva din nuvarande relation till sömnen?',
     answers: [
-      { text: "About a 2. Smooth sailing, gentle breezes.", score: 0 },
-      { text: "Around a 5. There are weather events, but manageable ones.", score: 1 },
-      { text: "Hovering around a 7. I cried at an advert for cheese.", score: 2 },
-      { text: "Solidly 10. I felt everything today. ALL of it.", score: 3 },
+      { text: 'Varm och stabil. Vi möts varje kväll klockan tio.', score: 0 },
+      { text: 'Opålitlig. Ibland dyker den upp, ibland inte.', score: 1 },
+      { text: 'Komplicerad. Vi har tagit ett uppehåll som jag aldrig gick med på.', score: 2 },
+      { text: 'Avbruten. Sömnen har ghostat mig totalt.', score: 3 },
     ],
   },
   {
     id: 6,
-    text: "You walk into a room with a purpose. You arrive. The purpose has vanished. How often does this happen?",
+    type: 'choice',
+    text: 'Någon tuggar. Högt. Kanske andas också. Hur reagerar du innerst inne?',
     answers: [
-      { text: "Rarely. I have the memory of a focused archivist.", score: 0 },
-      { text: "Sometimes. Usually I remember on the way back.", score: 1 },
-      { text: "Often. I've started narrating my intentions out loud.", score: 2 },
-      { text: "This is simply my life now. I wander. I accept it.", score: 3 },
+      { text: 'Jag märker ingenting. Jag är en lugn sjö.', score: 0 },
+      { text: 'En svag irritation som snabbt försvinner.', score: 1 },
+      { text: 'Jag utvecklar en tyst men intensiv åsikt om den personen.', score: 2 },
+      { text: 'Jag fantiserar om att äta lunch ensam. För alltid.', score: 3 },
     ],
   },
   {
     id: 7,
-    text: "How is your ability to concentrate on a single task from start to finish?",
+    type: 'choice',
+    text: 'Hur har ditt humör sett ut under en typisk vecka?',
     answers: [
-      { text: "Excellent. Focused, linear, unstoppable.", score: 0 },
-      { text: "Decent. I drift occasionally but return.", score: 1 },
-      { text: "Patchy. I have fourteen open tabs and they all feel urgent.", score: 2 },
-      { text: "I began answering this question and momentarily forgot what a question was.", score: 3 },
+      { text: 'Stabilt och jämnt. Som ett hav utan vågor.', score: 0 },
+      { text: 'Det finns väderväxlingar, men hanterbara.', score: 1 },
+      { text: 'Ganska intensivt. Jag grät vid en ostreklam.', score: 2 },
+      { text: 'Komplett BBC-dokumentär. Jag kände allt. ALLT.', score: 3 },
     ],
   },
   {
     id: 8,
-    text: "How would you describe your current tolerance for noise, nonsense, and other people's opinions?",
+    type: 'choice',
+    text: 'Du går in i ett rum med ett syfte. Du anländer. Syftet är borta. Hur ofta?',
     answers: [
-      { text: "High. I am open, curious, generously patient.", score: 0 },
-      { text: "Moderate. I have a threshold but it's politely enforced.", score: 1 },
-      { text: "Lower than before. I've started leaving rooms preemptively.", score: 2 },
-      { text: "Gone. I require silence, competence, and reasonable font sizes.", score: 3 },
+      { text: 'Sällan. Jag har minnet av en fokuserad arkivarie.', score: 0 },
+      { text: 'Ibland. Jag brukar komma ihåg det på vägen tillbaka.', score: 1 },
+      { text: 'Ofta. Jag har börjat berätta mina avsikter högt för mig själv.', score: 2 },
+      { text: 'Det är bara mitt liv nu. Jag vandrar. Jag accepterar det.', score: 3 },
     ],
   },
   {
     id: 9,
-    text: "Do you ever feel a sudden, urgent need to open a window, step outside, or simply be somewhere else — without warning?",
+    type: 'choice',
+    text: 'Hur är din förmåga att koncentrera dig på en enda uppgift från start till slut?',
     answers: [
-      { text: "No. I am comfortable wherever I am.", score: 0 },
-      { text: "Occasionally. I like fresh air. It's normal.", score: 1 },
-      { text: "Yes. There are moments where air becomes a medical necessity.", score: 2 },
-      { text: "I am basically a migratory creature now. Windows are always open.", score: 3 },
+      { text: 'Utmärkt. Fokuserad, linjär, ostoppbar.', score: 0 },
+      { text: 'Okej. Jag driver iväg ibland men återvänder.', score: 1 },
+      { text: 'Ojämn. Jag har fjorton öppna flikar och alla känns brådskande.', score: 2 },
+      { text: 'Jag började svara på den här frågan och glömde tillfälligt vad en fråga var.', score: 3 },
     ],
   },
   {
     id: 10,
-    text: "How would you describe your current energy levels across a typical day?",
+    type: 'choice',
+    text: 'Hur beskriver du din nuvarande tolerans för ljud, strunt och andras åsikter?',
     answers: [
-      { text: "Consistent and sufficient. I am powered.", score: 0 },
-      { text: "Mostly fine, with the occasional dip after lunch.", score: 1 },
-      { text: "Uneven. I have one good hour and then I conserve aggressively.", score: 2 },
-      { text: "A mystery. I never know if I'll be a person today or not.", score: 3 },
+      { text: 'Hög. Jag är öppen, nyfiken och generöst tålmodig.', score: 0 },
+      { text: 'Måttlig. Jag har en gräns men den upprätthålls artigt.', score: 1 },
+      { text: 'Lägre än förr. Jag har börjat lämna rum i förebyggande syfte.', score: 2 },
+      { text: 'Borta. Jag behöver tystnad, kompetens och rimliga fontstorlekar.', score: 3 },
     ],
   },
   {
     id: 11,
-    text: "Have you noticed any shifts in how you feel in your body — subtle changes, new sensations, a general sense that your internal settings have been updated without your consent?",
+    type: 'choice',
+    text: 'Känner du ibland ett plötsligt och akut behov av att öppna ett fönster, gå ut — utan förvarning?',
     answers: [
-      { text: "Not really. Everything feels familiar and fine.", score: 0 },
-      { text: "A little. Some things feel slightly different, but nothing dramatic.", score: 1 },
-      { text: "Yes. I feel like I've received a firmware update I didn't approve.", score: 2 },
-      { text: "Absolutely. My body is clearly running its own agenda.", score: 3 },
+      { text: 'Nej. Jag är bekväm var jag än befinner mig.', score: 0 },
+      { text: 'Ibland. Jag gillar frisk luft. Det är normalt.', score: 1 },
+      { text: 'Ja. Det finns ögonblick då luft blir en medicinsk nödvändighet.', score: 2 },
+      { text: 'Jag är i princip en migrerande varelse nu. Fönstren är alltid öppna.', score: 3 },
     ],
   },
   {
     id: 12,
-    text: "Finally — how often do you find yourself thinking 'is this just me, or is something happening?'",
+    type: 'choice',
+    text: 'Hur beskriver du din energinivå under en typisk dag?',
     answers: [
-      { text: "Never. I am untroubled by such questions.", score: 0 },
-      { text: "Once or twice. Idle curiosity, nothing more.", score: 1 },
-      { text: "Often enough that I took this quiz.", score: 2 },
-      { text: "So often that I've started Googling at 3am. (See also: Question 2.)", score: 3 },
+      { text: 'Jämn och tillräcklig. Jag är laddad.', score: 0 },
+      { text: 'Mestadels bra, med en occasional dipp efter lunch.', score: 1 },
+      { text: 'Ojämn. Jag har en bra timme och sedan sparar jag aggressivt.', score: 2 },
+      { text: 'Ett mysterium. Jag vet aldrig om jag kommer att vara en person idag eller inte.', score: 3 },
     ],
   },
 ]
+
+// Maps a raw answer value to a 0–3 score.
+//   'mood'   — rawValue is the option index; score comes from options[index].score
+//   'slider' — rawValue is 0–10; mapped to 0–3 in bands
+//   'choice' — rawValue IS the score
+export function getAnswerScore(question, rawValue) {
+  if (rawValue === undefined || rawValue === null) return 0
+  if (question.type === 'mood') {
+    return question.options[rawValue]?.score ?? 0
+  }
+  if (question.type === 'slider') {
+    if (rawValue <= 2) return 0
+    if (rawValue <= 5) return 1
+    if (rawValue <= 8) return 2
+    return 3
+  }
+  return rawValue // 'choice': rawValue === score
+}
