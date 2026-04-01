@@ -9,5 +9,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/menopause-quiz/', // <-- change this to your GitHub repo name
+  base: '/playground/', // GitHub repo name
 })
