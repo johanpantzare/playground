@@ -1,127 +1,81 @@
 import { useState } from 'react'
 import './app.css'
-import { questions, SCREENING_COUNT, SCREENING_THRESHOLD, getAnswerScore } from './data/questions'
+import { questions, getAnswerScore } from './data/questions'
 import { getResult } from './utils/results'
 import StartScreen from './components/StartScreen'
 import QuestionCard from './components/QuestionCard'
 import ResultCard from './components/ResultCard'
 
-const PHASE = {
-  START: 'start',
-  SCREENING: 'screening',
-  FULL: 'full',
-  RESULT: 'result',
-}
-
-const screeningQuestions = questions.slice(0, SCREENING_COUNT)
-const fullQuestions = questions.slice(SCREENING_COUNT)
-const MAX_SCORE = questions.length * 3
+const MAX_SCORE = questions.length * 3 // 15
 
 export default function App() {
-  const [phase, setPhase] = useState(PHASE.START)
+  const [screen, setScreen] = useState('start') // 'start' | 'quiz' | 'result'
   const [currentIndex, setCurrentIndex] = useState(0)
-  // answers[i] = raw value for question i (undefined = not yet answered)
   const [answers, setAnswers] = useState(Array(questions.length).fill(undefined))
 
-  const activeQuestions = phase === PHASE.SCREENING ? screeningQuestions : fullQuestions
-  const questionOffset = phase === PHASE.FULL ? SCREENING_COUNT : 0
-
   function handleStart() {
-    setPhase(PHASE.SCREENING)
+    setScreen('quiz')
     setCurrentIndex(0)
     setAnswers(Array(questions.length).fill(undefined))
   }
 
-  function handleAnswer(localIndex, rawValue) {
-    const globalIndex = questionOffset + localIndex
+  function handleAnswer(index, rawValue) {
     const updated = [...answers]
-    updated[globalIndex] = rawValue
+    updated[index] = rawValue
     setAnswers(updated)
 
-    const isLastInPhase = localIndex === activeQuestions.length - 1
-
-    if (phase === PHASE.SCREENING && isLastInPhase) {
-      // Evaluate screening score
-      const screeningScore = screeningQuestions.reduce((sum, q, i) => {
-        const val = updated[i]
-        return sum + getAnswerScore(q, val)
-      }, 0)
-
-      if (screeningScore < SCREENING_THRESHOLD) {
-        // All clear — show early result
-        setTimeout(() => setPhase(PHASE.RESULT), 350)
-      } else {
-        // Continue to full assessment
-        setTimeout(() => {
-          setCurrentIndex(0)
-          setPhase(PHASE.FULL)
-        }, 350)
-      }
-      return
+    if (index < questions.length - 1) {
+      setTimeout(() => setCurrentIndex(index + 1), 280)
+    } else {
+      setTimeout(() => setScreen('result'), 320)
     }
-
-    if (phase === PHASE.FULL && isLastInPhase) {
-      setTimeout(() => setPhase(PHASE.RESULT), 350)
-      return
-    }
-
-    setTimeout(() => setCurrentIndex(localIndex + 1), 300)
   }
 
   function handleBack() {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1)
-    } else if (phase === PHASE.FULL) {
-      // Go back to last screening question
-      setCurrentIndex(screeningQuestions.length - 1)
-      setPhase(PHASE.SCREENING)
-    }
+    if (currentIndex > 0) setCurrentIndex(currentIndex - 1)
   }
 
   function handleRestart() {
-    setPhase(PHASE.START)
+    setScreen('start')
     setCurrentIndex(0)
     setAnswers(Array(questions.length).fill(undefined))
   }
 
-  const totalScore = answers.reduce((sum, rawVal, i) => {
-    return sum + getAnswerScore(questions[i], rawVal)
-  }, 0)
-
-  const result = phase === PHASE.RESULT ? getResult(totalScore) : null
-
-  // Global question number for the progress bar (1-based)
-  const globalQuestionNumber = questionOffset + currentIndex + 1
-  const totalQuestions = questions.length
+  const totalScore = answers.reduce(
+    (sum, val, i) => sum + getAnswerScore(questions[i], val),
+    0
+  )
+  const result = screen === 'result' ? getResult(totalScore) : null
 
   return (
     <main className="app">
-      {phase === PHASE.START && (
+      {screen === 'start' && (
         <div className="card">
           <StartScreen onStart={handleStart} />
         </div>
       )}
 
-      {(phase === PHASE.SCREENING || phase === PHASE.FULL) && (
+      {screen === 'quiz' && (
         <div className="card">
           <QuestionCard
-            key={`${phase}-${currentIndex}`}
-            question={activeQuestions[currentIndex]}
-            localIndex={currentIndex}
-            globalQuestionNumber={globalQuestionNumber}
-            totalQuestions={totalQuestions}
+            key={currentIndex}
+            question={questions[currentIndex]}
+            index={currentIndex}
+            total={questions.length}
             onAnswer={handleAnswer}
             onBack={handleBack}
-            selectedValue={answers[questionOffset + currentIndex]}
-            showBack={currentIndex > 0 || phase === PHASE.FULL}
+            selectedValue={answers[currentIndex]}
+            isLast={currentIndex === questions.length - 1}
           />
         </div>
       )}
 
-      {phase === PHASE.RESULT && result && (
-        <div className="card">
+      {screen === 'result' && result && (
+        <div className="card card--receipt">
           <ResultCard
             result={result}
+            answers={answers}
+            questions={questions}
             totalScore={totalScore}
             maxScore={MAX_SCORE}
             onRestart={handleRestart}

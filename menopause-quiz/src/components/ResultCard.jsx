@@ -1,75 +1,131 @@
 import { useState } from 'react'
+import { getAnswerScore } from '../data/questions'
 import './ResultCard.css'
 
-export default function ResultCard({ result, totalScore, maxScore, onRestart }) {
+function ScoreDots({ score, max = 3 }) {
+  return (
+    <span className="score-dots" aria-label={`${score} av ${max}`}>
+      {Array.from({ length: max }, (_, i) => (
+        <span key={i} className={i < score ? 'dot dot--filled' : 'dot'} aria-hidden="true" />
+      ))}
+    </span>
+  )
+}
+
+export default function ResultCard({ result, answers, questions, totalScore, maxScore, onRestart }) {
   const [copied, setCopied] = useState(false)
 
+  const today = new Date().toLocaleDateString('sv-SE', {
+    year: 'numeric', month: 'long', day: 'numeric',
+  })
+
   async function handleCopy() {
-    const shareText = `${result.emoji} ${result.title}\n"${result.subtitle}"\n\nMitt resultat: ${totalScore}/${maxScore}\n\nTa testet: Är det klimakteriet, älskling?`
+    const text = `${result.emoji} ${result.title} — ${totalScore}/${maxScore}\n"${result.subtitle}"\n\nÄr det klimakteriet, älskling?`
     try {
-      await navigator.clipboard.writeText(shareText)
+      await navigator.clipboard.writeText(text)
       setCopied(true)
       setTimeout(() => setCopied(false), 2500)
-    } catch {
-      // Clipboard ej tillgängligt
-    }
+    } catch { /* silent */ }
   }
 
-  const scorePercent = Math.round((totalScore / maxScore) * 100)
-
   return (
-    <div className="result-card screen-enter">
-      <div className="result-header">
-        <span className="result-emoji" aria-hidden="true">{result.emoji}</span>
-        <h2 className="result-title">{result.title}</h2>
-        <p className="result-subtitle">{result.subtitle}</p>
+    <div className="receipt screen-enter">
+
+      {/* Perforated top edge */}
+      <div className="receipt-perf receipt-perf--top" aria-hidden="true" />
+
+      {/* Header */}
+      <div className="receipt-header">
+        <p className="receipt-store">VÄLMÅENDECENTRUM AB</p>
+        <p className="receipt-dept">Klimateriavdelningen</p>
+        <p className="receipt-org">Org.nr: 1972–∞</p>
       </div>
 
-      <div className="result-score-ring" aria-label={`Poäng: ${totalScore} av ${maxScore}`}>
-        <svg className="ring-svg" viewBox="0 0 80 80" aria-hidden="true">
-          <circle className="ring-bg" cx="40" cy="40" r="34" />
-          <circle
-            className="ring-fill"
-            cx="40"
-            cy="40"
-            r="34"
-            strokeDasharray={`${2 * Math.PI * 34}`}
-            strokeDashoffset={`${2 * Math.PI * 34 * (1 - scorePercent / 100)}`}
-          />
-        </svg>
-        <div className="ring-label">
-          <span className="ring-number">{totalScore}</span>
-          <span className="ring-max">/ {maxScore}</span>
+      <div className="receipt-rule" />
+
+      {/* Meta */}
+      <div className="receipt-meta">
+        <span>Datum</span><span>{today}</span>
+        <span>Kund</span><span>Dig, älskling</span>
+        <span>Ärende</span><span>Inre klimatkontroll</span>
+      </div>
+
+      <div className="receipt-rule" />
+
+      {/* Line items */}
+      <div className="receipt-items">
+        <div className="receipt-item receipt-item--head">
+          <span>Artikel</span>
+          <span>Nivå</span>
+          <span>Poäng</span>
+        </div>
+        {questions.map((q, i) => {
+          const raw = answers[i]
+          const score = getAnswerScore(q, raw)
+          return (
+            <div key={q.id} className="receipt-item">
+              <span>{q.shortName}</span>
+              <ScoreDots score={score} />
+              <span>{score}/3</span>
+            </div>
+          )
+        })}
+      </div>
+
+      <div className="receipt-rule" />
+
+      {/* Total */}
+      <div className="receipt-total">
+        <span>TOTALT</span>
+        <span>{totalScore}/{maxScore}</span>
+      </div>
+
+      <div className="receipt-rule" />
+
+      {/* Stamp */}
+      <div className="receipt-stamp-area">
+        <div className={`stamp stamp--${result.id}`}>
+          <span className="stamp-emoji" aria-hidden="true">{result.emoji}</span>
+          <span className="stamp-label">{result.stamp}</span>
+          <span className="stamp-title">{result.title}</span>
         </div>
       </div>
 
-      <div className="result-body">
-        {result.body.split('\n\n').map((paragraph, i) => (
-          <p key={i} className="result-paragraph">{paragraph}</p>
+      {/* Result text */}
+      <div className="receipt-result">
+        <p className="receipt-subtitle">{result.subtitle}</p>
+        {result.body.split('\n\n').map((p, i) => (
+          <p key={i} className="receipt-body-text">{p}</p>
         ))}
       </div>
 
-      <div className="result-nudge">
-        <span aria-hidden="true">💬</span>
-        <p>{result.nudge}</p>
+      <div className="receipt-rule" />
+
+      {/* Nudge */}
+      <p className="receipt-nudge">{result.nudge}</p>
+
+      <div className="receipt-rule" />
+
+      {/* Footer */}
+      <div className="receipt-footer">
+        <p>Tack för ditt besök!</p>
+        <p className="receipt-disclaimer">Ej medicinsk rådgivning</p>
+        <div className="barcode" aria-hidden="true" />
+        <p className="receipt-tagline">* * * spara kvittot * * *</p>
       </div>
 
-      <div className="result-actions">
-        <button className="btn-primary result-restart" onClick={onRestart}>
+      {/* Perforated bottom edge */}
+      <div className="receipt-perf receipt-perf--bottom" aria-hidden="true" />
+
+      {/* Actions (outside receipt paper) */}
+      <div className="receipt-actions">
+        <button className="btn-primary" onClick={onRestart} type="button">
           Gör om testet
         </button>
-        <button
-          className="btn-ghost result-copy"
-          onClick={handleCopy}
-          aria-live="polite"
-        >
-          {copied ? '✓ Kopierat!' : 'Kopiera resultat'}
+        <button className="btn-ghost" onClick={handleCopy} aria-live="polite" type="button">
+          {copied ? '✓ Kopierat!' : 'Kopiera'}
         </button>
       </div>
-
-      <p className="result-fine-print">
-        Det här är inte en medicinsk bedömning. Det är dock en vibe check.
-      </p>
     </div>
   )
 }

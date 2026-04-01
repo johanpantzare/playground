@@ -52,10 +52,19 @@
   animation: fadeSlideIn var(--transition-slow) both;
 }
 
+/* Receipt card — tighter padding so perforations bleed to edge */
+.card--receipt {
+  padding: 0 44px;
+  overflow: hidden;
+}
+
 @media (max-width: 640px) {
   .card {
     padding: 36px 24px;
     border-radius: var(--radius-lg);
+  }
+  .card--receipt {
+    padding: 0 24px;
   }
 }
 

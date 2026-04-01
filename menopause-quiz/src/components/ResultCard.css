@@ -1,202 +1,302 @@
-.result-card {
+/* ── Receipt card ──────────────────────────────────────────── */
+
+.receipt {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  align-items: stretch;
   gap: 0;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.85rem;
+  color: var(--color-text);
+  position: relative;
+}
+
+/* Perforated edges */
+.receipt-perf {
+  height: 18px;
+  background-image: radial-gradient(
+    circle at 9px 50%,
+    var(--color-bg) 7px,
+    transparent 7px
+  );
+  background-size: 18px 18px;
+  background-repeat: repeat-x;
+  flex-shrink: 0;
+  margin: 0 -44px; /* bleed to card edges */
+}
+
+@media (max-width: 640px) {
+  .receipt-perf {
+    margin: 0 -24px;
+  }
 }
 
 /* Header */
-.result-header {
-  margin-bottom: 28px;
+.receipt-header {
+  text-align: center;
+  padding: 16px 0 12px;
+  line-height: 1.5;
 }
 
-.result-emoji {
-  font-size: 2.8rem;
-  display: block;
-  margin-bottom: 12px;
-  animation: resultBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  animation-delay: 0.1s;
-}
-
-@keyframes resultBounce {
-  from {
-    opacity: 0;
-    transform: scale(0.5);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.result-title {
-  font-family: var(--font-heading);
-  font-size: clamp(1.7rem, 5vw, 2.2rem);
-  font-weight: 700;
-  color: var(--color-text);
-  margin-bottom: 8px;
-  animation: fadeSlideIn var(--transition-slow) both;
-  animation-delay: 0.2s;
-}
-
-.result-subtitle {
+.receipt-store {
   font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-text);
+}
+
+.receipt-dept {
+  font-size: 0.8rem;
   color: var(--color-text-muted);
-  font-style: italic;
-  animation: fadeSlideIn var(--transition-slow) both;
-  animation-delay: 0.3s;
+  letter-spacing: 0.05em;
 }
 
-/* Score ring */
-.result-score-ring {
-  position: relative;
-  width: 100px;
-  height: 100px;
-  margin-bottom: 32px;
-  animation: fadeSlideIn var(--transition-slow) both;
-  animation-delay: 0.35s;
+.receipt-org {
+  font-size: 0.72rem;
+  color: var(--color-text-light);
 }
 
-.ring-svg {
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
+/* Divider rule */
+.receipt-rule {
+  border: none;
+  border-top: 1px dashed var(--color-border);
+  margin: 10px 0;
 }
 
-.ring-bg {
-  fill: none;
-  stroke: var(--color-border);
-  stroke-width: 5;
+/* Meta rows */
+.receipt-meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 3px 12px;
+  padding: 4px 0;
+  font-size: 0.78rem;
 }
 
-.ring-fill {
-  fill: none;
-  stroke: url(#ringGradient);
-  stroke: var(--color-accent);
-  stroke-width: 5;
-  stroke-linecap: round;
-  transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;
+.receipt-meta span:nth-child(odd) {
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.7rem;
 }
 
-.ring-label {
-  position: absolute;
-  inset: 0;
+.receipt-meta span:nth-child(even) {
+  color: var(--color-text);
+}
+
+/* Items table */
+.receipt-items {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 4px 0;
+}
+
+.receipt-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.receipt-item--head {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 4px;
+  margin-bottom: 2px;
+}
+
+/* Score dots */
+.score-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border);
+  display: inline-block;
+}
+
+.dot--filled {
+  background: var(--color-accent);
+}
+
+/* Total */
+.receipt-total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 4px 0;
+  letter-spacing: 0.04em;
+}
+
+/* Stamp */
+.receipt-stamp-area {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0 12px;
+}
+
+.stamp {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 3px double var(--color-accent);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  line-height: 1.1;
+  gap: 2px;
+  transform: rotate(-12deg);
+  opacity: 0.88;
+  background: rgba(232, 183, 200, 0.07);
+  animation: stampIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation-delay: 0.3s;
+  position: relative;
 }
 
-.ring-number {
-  font-family: var(--font-heading);
-  font-size: 1.6rem;
+@keyframes stampIn {
+  from { opacity: 0; transform: rotate(-12deg) scale(1.4); }
+  to   { opacity: 0.88; transform: rotate(-12deg) scale(1); }
+}
+
+.stamp-emoji {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.stamp-label {
+  font-family: 'Courier New', monospace;
+  font-size: 0.6rem;
   font-weight: 700;
-  color: var(--color-text);
+  letter-spacing: 0.12em;
+  color: var(--color-accent-deep);
+  text-transform: uppercase;
 }
 
-.ring-max {
+.stamp-title {
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-align: center;
+  line-height: 1.2;
+  padding: 0 8px;
+}
+
+/* Result text — switch back to nice font */
+.receipt-result {
+  padding: 4px 0 8px;
+}
+
+.receipt-subtitle {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--color-text);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.receipt-body-text {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+
+/* Nudge */
+.receipt-nudge {
   font-size: 0.72rem;
   color: var(--color-text-light);
-  font-weight: 500;
-}
-
-/* Body text */
-.result-body {
-  background: var(--color-soft-surface);
-  border-radius: var(--radius-lg);
-  padding: 28px 28px;
-  margin-bottom: 24px;
-  text-align: left;
-  width: 100%;
-  animation: fadeSlideIn var(--transition-slow) both;
-  animation-delay: 0.4s;
-}
-
-.result-paragraph {
-  font-size: 0.95rem;
-  color: var(--color-text);
-  line-height: 1.75;
-}
-
-.result-paragraph + .result-paragraph {
-  margin-top: 16px;
-}
-
-/* Nudge box */
-.result-nudge {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 16px 18px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-left: 3px solid var(--color-primary);
-  border-radius: var(--radius-md);
-  margin-bottom: 28px;
-  width: 100%;
-  text-align: left;
-  animation: fadeSlideIn var(--transition-slow) both;
-  animation-delay: 0.5s;
-}
-
-.result-nudge span {
-  font-size: 1rem;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-
-.result-nudge p {
-  font-size: 0.85rem;
-  color: var(--color-text-muted);
-  line-height: 1.6;
-}
-
-/* Actions */
-.result-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
-  margin-bottom: 20px;
-  animation: fadeSlideIn var(--transition-slow) both;
-  animation-delay: 0.55s;
-}
-
-.result-restart {
-  margin-bottom: 0;
-}
-
-.result-copy {
-  min-width: 120px;
-}
-
-/* Fine print */
-.result-fine-print {
-  font-size: 0.75rem;
-  color: var(--color-text-light);
+  line-height: 1.55;
   font-style: italic;
-  animation: fadeSlideIn var(--transition-slow) both;
-  animation-delay: 0.6s;
+  padding: 4px 0;
 }
 
-/* Import btn-primary from StartScreen.css — mirrored here for encapsulation */
+/* Footer */
+.receipt-footer {
+  text-align: center;
+  padding: 8px 0 12px;
+  line-height: 1.8;
+}
+
+.receipt-footer p {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.receipt-disclaimer {
+  font-size: 0.68rem !important;
+  color: var(--color-text-light) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Decorative barcode */
+.barcode {
+  height: 36px;
+  margin: 8px auto;
+  width: 160px;
+  background: repeating-linear-gradient(
+    90deg,
+    #c4a3ae 0px,   #c4a3ae 2px,
+    transparent    2px,   transparent    4px,
+    #c4a3ae 4px,   #c4a3ae 5px,
+    transparent    5px,   transparent    8px,
+    #c4a3ae 8px,   #c4a3ae 11px,
+    transparent    11px,  transparent    13px,
+    #c4a3ae 13px,  #c4a3ae 14px,
+    transparent    14px,  transparent    17px,
+    #c4a3ae 17px,  #c4a3ae 20px,
+    transparent    20px,  transparent    22px,
+    #c4a3ae 22px,  #c4a3ae 24px,
+    transparent    24px,  transparent    27px,
+    #c4a3ae 27px,  #c4a3ae 28px,
+    transparent    28px,  transparent    31px,
+    #c4a3ae 31px,  #c4a3ae 34px,
+    transparent    34px,  transparent    37px,
+    #c4a3ae 37px,  #c4a3ae 38px,
+    transparent    38px,  transparent    41px,
+    #c4a3ae 41px,  #c4a3ae 44px
+  );
+}
+
+.receipt-tagline {
+  font-size: 0.68rem !important;
+  color: var(--color-text-light) !important;
+  letter-spacing: 0.08em;
+}
+
+/* Actions below receipt */
+.receipt-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding-top: 4px;
+}
+
 .btn-primary {
-  display: inline-block;
-  padding: 14px 36px;
+  padding: 13px 28px;
   background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-deep) 100%);
   color: #fff;
   font-family: var(--font-body);
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   letter-spacing: 0.02em;
   border-radius: 100px;
   border: none;
   cursor: pointer;
-  transition:
-    transform var(--transition-fast),
-    box-shadow var(--transition-fast);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
   box-shadow: 0 4px 16px rgba(217, 123, 157, 0.35);
 }
 
@@ -205,29 +305,22 @@
   box-shadow: 0 8px 24px rgba(217, 123, 157, 0.45);
 }
 
-.btn-primary:active {
-  transform: translateY(0);
-}
-
 .btn-primary:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 4px;
 }
 
 .btn-ghost {
-  padding: 13px 20px;
+  padding: 12px 20px;
   color: var(--color-text-muted);
   font-family: var(--font-body);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 600;
   border-radius: 100px;
-  border: 2px solid var(--color-border);
+  border: 1.5px solid var(--color-border);
   background: transparent;
   cursor: pointer;
-  transition:
-    color var(--transition-fast),
-    border-color var(--transition-fast),
-    background var(--transition-fast);
+  transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
 }
 
 .btn-ghost:hover {
