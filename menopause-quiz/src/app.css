@@ -1,0 +1,86 @@
+/* App layout wrapper */
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px 48px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Decorative background blobs */
+.app::before,
+.app::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app::before {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(232, 183, 200, 0.25) 0%, transparent 70%);
+  top: -200px;
+  right: -150px;
+}
+
+.app::after {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(217, 123, 157, 0.12) 0%, transparent 70%);
+  bottom: -100px;
+  left: -100px;
+}
+
+/* Main card container */
+.card {
+  position: relative;
+  z-index: 1;
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  box-shadow:
+    0 2px 8px var(--color-shadow),
+    0 8px 32px var(--color-shadow-deep);
+  padding: 48px 44px;
+  width: 100%;
+  max-width: 620px;
+  animation: fadeSlideIn var(--transition-slow) both;
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 36px 24px;
+    border-radius: var(--radius-lg);
+  }
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Screen transitions */
+.screen-enter {
+  animation: fadeSlideIn var(--transition-base) both;
+}
+
+/* Utility */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
