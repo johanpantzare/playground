@@ -50,3 +50,26 @@ export const results = [
 export function getResult(totalScore) {
   return results.find((r) => totalScore >= r.minScore && totalScore <= r.maxScore)
 }
+
+// Vallningsenheter (VE) — exponential heat unit scale.
+// rawSum = sum of all raw slider values (0–50).
+// Formula: VE = ⌊ e^(Σ × 0.45) × 10 ⌋
+export function computeVE(rawSum) {
+  return Math.round(Math.exp(rawSum * 0.45) * 10)
+}
+
+export function formatVE(ve) {
+  return ve.toLocaleString('sv-SE')
+}
+
+// Reference points for the VE scale — shown on the receipt for context (chaos).
+export const VE_REFERENCES = [
+  { label: 'Lugn dag på kontoret',   ve: 47 },
+  { label: 'Stark kaffe (dubbel)',    ve: 312 },
+  { label: 'Jalapeño (Scoville)',     ve: 8_000 },
+  { label: 'Habanero (Scoville)',     ve: 350_000 },
+  { label: 'Ghost pepper (Scoville)', ve: 1_000_000 },
+  { label: 'Carolina Reaper',         ve: 2_200_000 },
+  { label: 'Aktiv vulkan (est.)',     ve: 48_000_000 },
+  { label: 'Jordens kärna (est.)',    ve: 12_000_000_000 },
+]

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { getAnswerScore } from '../data/questions'
+import { computeVE, formatVE, VE_REFERENCES } from '../utils/results'
 import './ResultCard.css'
 
 function ScoreDots({ score, max = 3 }) {
@@ -12,6 +13,14 @@ function ScoreDots({ score, max = 3 }) {
   )
 }
 
+// Find the two reference points the user sits between
+function getVEContext(ve) {
+  const sorted = [...VE_REFERENCES].sort((a, b) => a.ve - b.ve)
+  const below = [...sorted].filter(r => r.ve <= ve).pop()
+  const above = sorted.find(r => r.ve > ve)
+  return { below, above }
+}
+
 export default function ResultCard({ result, answers, questions, totalScore, maxScore, onRestart }) {
   const [copied, setCopied] = useState(false)
 
@@ -19,8 +28,12 @@ export default function ResultCard({ result, answers, questions, totalScore, max
     year: 'numeric', month: 'long', day: 'numeric',
   })
 
+  const rawSum = answers.reduce((sum, val) => sum + (val ?? 0), 0)
+  const ve = computeVE(rawSum)
+  const { below, above } = getVEContext(ve)
+
   async function handleCopy() {
-    const text = `${result.emoji} ${result.title} — ${totalScore}/${maxScore}\n"${result.subtitle}"\n\nÄr det klimakteriet, älskling?`
+    const text = `${result.emoji} ${result.title}\n${formatVE(ve)} VE\n"${result.subtitle}"\n\nÄr det klimakteriet, älskling?`
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
@@ -31,10 +44,8 @@ export default function ResultCard({ result, answers, questions, totalScore, max
   return (
     <div className="receipt screen-enter">
 
-      {/* Perforated top edge */}
       <div className="receipt-perf receipt-perf--top" aria-hidden="true" />
 
-      {/* Header */}
       <div className="receipt-header">
         <p className="receipt-store">VÄLMÅENDECENTRUM AB</p>
         <p className="receipt-dept">Klimateriavdelningen</p>
@@ -43,7 +54,6 @@ export default function ResultCard({ result, answers, questions, totalScore, max
 
       <div className="receipt-rule" />
 
-      {/* Meta */}
       <div className="receipt-meta">
         <span>Datum</span><span>{today}</span>
         <span>Kund</span><span>Dig, älskling</span>
@@ -57,11 +67,10 @@ export default function ResultCard({ result, answers, questions, totalScore, max
         <div className="receipt-item receipt-item--head">
           <span>Artikel</span>
           <span>Nivå</span>
-          <span>Poäng</span>
+          <span>p</span>
         </div>
         {questions.map((q, i) => {
-          const raw = answers[i]
-          const score = getAnswerScore(q, raw)
+          const score = getAnswerScore(q, answers[i])
           return (
             <div key={q.id} className="receipt-item">
               <span>{q.shortName}</span>
@@ -74,10 +83,42 @@ export default function ResultCard({ result, answers, questions, totalScore, max
 
       <div className="receipt-rule" />
 
-      {/* Total */}
       <div className="receipt-total">
-        <span>TOTALT</span>
-        <span>{totalScore}/{maxScore}</span>
+        <span>RÅSUMMA</span>
+        <span>{rawSum} / 50</span>
+      </div>
+
+      <div className="receipt-rule" />
+
+      {/* VE block — the star of the show */}
+      <div className="ve-block">
+        <p className="ve-label">VALLNINGSENHETER (VE)</p>
+        <p className="ve-formula">VE = ⌊ e^(Σ × 0.45) × 10 ⌋</p>
+        <p className="ve-number">{formatVE(ve)}</p>
+        <p className="ve-unit">VE</p>
+
+        <div className="ve-references">
+          <p className="ve-ref-head">— Referensskala —</p>
+          {VE_REFERENCES.map((ref) => {
+            const isUser = below && above
+              ? ref.ve === below.ve
+              : false
+            const isAbove = above && ref.ve === above.ve
+            return (
+              <div
+                key={ref.label}
+                className={`ve-ref-row ${isUser ? 've-ref-row--you-below' : ''} ${isAbove ? 've-ref-row--you-above' : ''}`}
+              >
+                <span className="ve-ref-label">{ref.label}</span>
+                <span className="ve-ref-val">{formatVE(ref.ve)}</span>
+              </div>
+            )
+          })}
+          <div className="ve-ref-row ve-ref-row--you">
+            <span className="ve-ref-label">★ DU</span>
+            <span className="ve-ref-val">{formatVE(ve)}</span>
+          </div>
+        </div>
       </div>
 
       <div className="receipt-rule" />
@@ -91,7 +132,6 @@ export default function ResultCard({ result, answers, questions, totalScore, max
         </div>
       </div>
 
-      {/* Result text */}
       <div className="receipt-result">
         <p className="receipt-subtitle">{result.subtitle}</p>
         {result.body.split('\n\n').map((p, i) => (
@@ -101,12 +141,10 @@ export default function ResultCard({ result, answers, questions, totalScore, max
 
       <div className="receipt-rule" />
 
-      {/* Nudge */}
       <p className="receipt-nudge">{result.nudge}</p>
 
       <div className="receipt-rule" />
 
-      {/* Footer */}
       <div className="receipt-footer">
         <p>Tack för ditt besök!</p>
         <p className="receipt-disclaimer">Ej medicinsk rådgivning</p>
@@ -114,10 +152,8 @@ export default function ResultCard({ result, answers, questions, totalScore, max
         <p className="receipt-tagline">* * * spara kvittot * * *</p>
       </div>
 
-      {/* Perforated bottom edge */}
       <div className="receipt-perf receipt-perf--bottom" aria-hidden="true" />
 
-      {/* Actions (outside receipt paper) */}
       <div className="receipt-actions">
         <button className="btn-primary" onClick={onRestart} type="button">
           Gör om testet
