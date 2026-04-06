@@ -62,7 +62,51 @@ export function formatVE(ve) {
   return ve.toLocaleString('sv-SE')
 }
 
-// Reference points for the VE scale — shown on the receipt for context (chaos).
+// VE tiers — each maps to a current song, YouTube video ID, and a tailored exercise.
+// The exercise subtly suggests the user might score higher next time.
+export const VE_TIERS = [
+  {
+    maxVE: 499,
+    song: 'Calm Down',
+    artist: 'Rema & Selena Gomez',
+    videoId: 'WcIcVapfqXw',
+    exercise: 'Ta tre djupa andetag. Föreställ dig din lyckliga plats — solen, havsluften, tystnaden. Njut av lugnet.\n\nGå sedan och kolla om skorna i hallen står snett, bara för att dubbelkolla att du verkligen mår bra.',
+  },
+  {
+    maxVE: 19_999,
+    song: 'Heat Waves',
+    artist: 'Glass Animals',
+    videoId: 'mRD0-GxqHVo',
+    exercise: 'Blunda. Andas in 4 sekunder, håll 4, ut 4. Känn hur kroppen landar.\n\nLyssna sedan aktivt på om någon i närheten tuggar med öppen mun. Anteckna resultatet. Vi ses nästa vecka.',
+  },
+  {
+    maxVE: 999_999,
+    song: 'Burn',
+    artist: 'Ellie Goulding',
+    videoId: 'CGyEd0aKWZE',
+    exercise: 'Gå och kolla om tvätten du bad om att få vikat för tre dagar sedan fortfarande ligger i korgen.\n\nAndas. Stick sedan ut och ta lite frisk luft — du vet redan varför.',
+  },
+  {
+    maxVE: 99_999_999,
+    song: 'CUFF IT',
+    artist: 'Beyoncé',
+    videoId: 'yrtWLyp5gLI',
+    exercise: 'Öppna ett fönster. Ta av dig ett lager kläder. Sitt stilla i 90 sekunder.\n\nGå sedan och se om din partner andas märkbart högt just nu. Du vet vad du hittar. Du förtjänar ändå hela den här låten.',
+  },
+  {
+    maxVE: Infinity,
+    song: 'Unholy',
+    artist: 'Sam Smith & Kim Petras',
+    videoId: 'Uq9gPaIzbe8',
+    exercise: 'Mörkt rum. Fläkt riktad mot ansiktet. Svara på inga meddelanden.\n\nIngen behöver veta var du är just nu. Låt någon annan ta hand om middagen. Det är inte en förfrågan.',
+  },
+]
+
+export function getVETier(ve) {
+  return VE_TIERS.find((t) => ve <= t.maxVE)
+}
+
+// Reference points shown on the receipt for scale context
 export const VE_REFERENCES = [
   { label: 'Lugn dag på kontoret',   ve: 47 },
   { label: 'Stark kaffe (dubbel)',    ve: 312 },
