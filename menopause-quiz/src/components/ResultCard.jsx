@@ -91,7 +91,7 @@ export default function ResultCard({ result, answers, questions, totalScore, max
 
       <div className="receipt-rule" />
 
-      {/* Stamp + result */}
+      {/* Stamp */}
       <div className="receipt-stamp-area">
         <div className={`stamp stamp--${result.id}`}>
           <span className="stamp-emoji" aria-hidden="true">{result.emoji}</span>
@@ -100,19 +100,10 @@ export default function ResultCard({ result, answers, questions, totalScore, max
         </div>
       </div>
 
-      <div className="receipt-result">
-        <p className="receipt-subtitle">{result.subtitle}</p>
-        {result.body.split('\n\n').map((p, i) => (
-          <p key={i} className="receipt-body-text">{p}</p>
-        ))}
-      </div>
-
-      <div className="receipt-rule" />
-
-      {/* Exercise */}
+      {/* Exercise — before summary */}
       {tier && (
         <div className="exercise-block">
-          <p className="exercise-heading">— Din rekommenderade övning —</p>
+          <h2 className="exercise-heading">Din rekommenderade övning</h2>
           {tier.exercise.split('\n\n').map((p, i) => (
             <p key={i} className="exercise-text">{p}</p>
           ))}
@@ -122,10 +113,20 @@ export default function ResultCard({ result, answers, questions, totalScore, max
             target="_blank"
             rel="noopener noreferrer"
           >
-            ▶ "{tier.song}" — {tier.artist}
+            ▶ &ldquo;{tier.song}&rdquo; — {tier.artist}
           </a>
         </div>
       )}
+
+      <div className="receipt-rule" />
+
+      {/* Summary — after exercise */}
+      <div className="receipt-result">
+        <p className="receipt-subtitle">{result.subtitle}</p>
+        {result.body.split('\n\n').map((p, i) => (
+          <p key={i} className="receipt-body-text">{p}</p>
+        ))}
+      </div>
 
       <div className="receipt-rule" />
 
